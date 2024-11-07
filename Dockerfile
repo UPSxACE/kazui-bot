@@ -27,4 +27,4 @@ COPY --from=build /usr/src/app/dist ./dist
 EXPOSE 3000
 
 # Command to run the app
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/bot.js"]
