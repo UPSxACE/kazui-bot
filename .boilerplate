@@ -1,0 +1,22 @@
+// bot.on("chat_member", (ctx) => {
+//   const oldStatus = ctx.chatMember.old_chat_member.status;
+//   const newStatus = ctx.chatMember.new_chat_member.status;
+//   const username = ctx.chatMember.old_chat_member.user.username;
+//   if (inGroup(oldStatus) && !inGroup(newStatus)) {
+//     console.log(`User ${username} left.`);
+//   }
+//   if (!inGroup(oldStatus) && inGroup(newStatus)) {
+//     console.log(`User ${username} joined.`);
+//   }
+// });
+
+// bot.command("test_short", (ctx) => {
+//   try {
+//     ctx.reply(translator.fromUUID(ctx.args[0])); // mhvXdrZT4jP5T8vBxuvm75
+//   } catch {}
+// });
+// bot.command("test_unshort", (ctx) => {
+//   try {
+//     ctx.reply(translator.toUUID(ctx.args[0])); // mhvXdrZT4jP5T8vBxuvm75
+//   } catch {}
+// });

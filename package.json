@@ -1,0 +1,30 @@
+{
+  "name": "kazui-bot",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec node --loader ts-node/esm ./bot.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.46.1",
+    "@telegraf/entity": "^0.5.0",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "grammy": "^1.31.0",
+    "nodemon": "^3.1.7",
+    "short-uuid": "^5.2.0",
+    "telegraf": "^4.16.3",
+    "ts-node": "^10.9.2",
+    "uuid": "^11.0.2",
+    "zod": "^3.23.8"
+  }
+}
