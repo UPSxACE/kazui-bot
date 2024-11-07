@@ -21,6 +21,10 @@ bot.command("chatid", async (ctx) => {
 
 // Handle the /start command.
 bot.command("start", async (ctx) => {
+  if (ctx.chat.type !== "private") {
+    return "";
+  }
+
   const { success, data } = z.string().safeParse(ctx.args[0]);
   if (success) {
     const validShortUuid = translator.validate(data, true);
@@ -179,7 +183,7 @@ bot.launch(
         },
       ],
       {
-        scope: { type: "default" },
+        scope: { type: "all_private_chats" },
       }
     );
 
