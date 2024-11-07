@@ -9,7 +9,7 @@ const BOT_USERNAME = process.env.BOT_USERNAME;
 const BOT_USERNAME_ESCAPED = process.env.BOT_USERNAME_ESCAPED;
 const INVITE_LINK = "t.me/+VQsPcp4dYGE0YjQ0";
 const INVITE_LINK_ESCAPED = "t\\.me/+VQsPcp4dYGE0YjQ0";
-const GROUP_CHAT_ID = -1002281528574;
+const GROUP_CHAT_ID = Number(process.env.CHAT_ID);
 const bot = new Telegraf(process.env.TOKEN ?? "");
 const translator = shortUUID();
 
@@ -62,27 +62,6 @@ Join our community to participate in periodic giveaways and events, and stay up 
     : Markup.inlineKeyboard([Markup.button.url("Join community", INVITE_LINK)]);
   // Normal start command
   ctx.reply(message, extra);
-});
-
-bot.command("test_invite", async (ctx) => {
-  console.log("TEST INVITE! ARGS: ", ctx.args);
-  const [_link, _id, _username] = ctx.args;
-  const { success, data } = z
-    .tuple([z.string(), z.number(), z.string()])
-    .safeParse([_link, Number(_id), _username]);
-
-  if (!success) return;
-
-  // valid args
-  const [link, id, username] = data;
-
-  const callerid = ctx.message.from.id;
-  const caller = await ctx.getChatMember(callerid).catch(() => null);
-  if (caller?.status === "administrator" || caller?.status === "creator") {
-    // Is admin
-    const result = await database.join(link, id, username);
-    ctx.reply(result ? "New member!" : "Not new.");
-  }
 });
 
 bot.command("createinvite", async (ctx) => {
