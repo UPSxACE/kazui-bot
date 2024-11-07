@@ -13,6 +13,7 @@ const GROUP_CHAT_ID = Number(process.env.CHAT_ID);
 const bot = new Telegraf(process.env.TOKEN ?? "");
 const translator = shortUUID();
 
+console.log;
 const escape = escapers.MarkdownV2;
 
 bot.command("chatid", async (ctx) => {

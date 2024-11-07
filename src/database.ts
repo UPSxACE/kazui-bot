@@ -64,6 +64,7 @@ async function getLeaderboardLeaders() {
   let { data, error } = await supabase
     .from("user_invites")
     .select("*")
+    .order("points", { ascending: false })
     .range(0, 9);
 
   const user_invites = z
