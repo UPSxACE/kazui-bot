@@ -1,0 +1,9 @@
+services:
+  kazui-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+    restart: always
+    env_file: .env
