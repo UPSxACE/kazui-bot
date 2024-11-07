@@ -22,7 +22,7 @@ bot.command("chatid", async (ctx) => {
 // Handle the /start command.
 bot.command("start", async (ctx) => {
   if (ctx.chat.type !== "private") {
-    return "";
+    return;
   }
 
   const { success, data } = z.string().safeParse(ctx.args[0]);
@@ -49,7 +49,15 @@ Join our community to participate in periodic giveaways and events, and stay up 
   const inCommunity = await bot.telegram
     .getChatMember(GROUP_CHAT_ID, ctx.message.from.id)
     .then(() => true)
-    .catch(() => false);
+    .catch((err) => {
+      console.log(err);
+      return false;
+    });
+
+  console.log(
+    (ctx?.message?.from?.username ?? "Anonymous") +
+      ` ${inCommunity ? "is" : "is not"} in the kazui group.`
+  );
 
   const messageIn = `Greetings punisher 😼`;
   const messageOut = `Join our community to participate in periodic giveaways and events, and stay up to date with the latest project updates. 😼`;
@@ -123,8 +131,16 @@ ${await referralsTop10()}
 
 *Next giveaway:* ${escape(date ?? "To be announced soon...")}
 `;
+  const extra = Markup.inlineKeyboard([
+    [
+      Markup.button.url(
+        "Create invite",
+        "t.me/KazuiCoinBot?start=createinvite"
+      ),
+    ],
+  ]);
 
-  ctx.replyWithMarkdownV2(message);
+  ctx.replyWithMarkdownV2(message, extra);
 });
 
 bot.action("leaderboard", async (ctx) => {
