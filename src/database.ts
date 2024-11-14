@@ -78,6 +78,24 @@ async function getLeaderboardLeaders() {
   return user_invites;
 }
 
+async function getAllUsers() {
+  let { data, error } = await supabase
+    .from("user_invites")
+    .select("*")
+    .order("points", { ascending: false });
+
+  const user_invites = z
+    .object({
+      userid: z.number(),
+      username: z.string(),
+      points: z.number(),
+    })
+    .array()
+    .parse(data);
+
+  return user_invites;
+}
+
 async function getNextGiveawayDate() {
   let { data, error } = await supabase
     .from("next_giveaway")
@@ -90,6 +108,11 @@ async function getNextGiveawayDate() {
   return next_giveaway?.when ?? null;
 }
 
-const database = { join, getLeaderboardLeaders, getNextGiveawayDate };
+const database = {
+  join,
+  getLeaderboardLeaders,
+  getNextGiveawayDate,
+  getAllUsers,
+};
 
 export default database;

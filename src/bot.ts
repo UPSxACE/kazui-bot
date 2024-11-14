@@ -5,6 +5,12 @@ import { Markup, Telegraf } from "telegraf";
 import { z } from "zod";
 import database, { getInviteLink } from "./database.js";
 
+function getRandomInt(min: number, max: number) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+}
+
 const BOT_USERNAME = process.env.BOT_USERNAME;
 const BOT_USERNAME_ESCAPED = process.env.BOT_USERNAME_ESCAPED;
 const INVITE_LINK = "t.me/+VQsPcp4dYGE0YjQ0";
@@ -13,7 +19,6 @@ const GROUP_CHAT_ID = Number(process.env.CHAT_ID);
 const bot = new Telegraf(process.env.TOKEN ?? "");
 const translator = shortUUID();
 
-console.log;
 const escape = escapers.MarkdownV2;
 
 bot.command("chatid", async (ctx) => {
@@ -171,6 +176,70 @@ ${await referralsTop10()}
 `;
 
   ctx.replyWithMarkdownV2(message);
+});
+
+bot.command("referralsgiveaway", async (ctx) => {
+  const [id, reward] = ctx.args;
+  if (ctx.args.length !== 2) {
+    return;
+  }
+  const callerid = ctx.message.from.id;
+  const caller = await ctx.getChatMember(callerid).catch(() => null);
+  if (caller?.status === "administrator" || caller?.status === "creator") {
+    setTimeout(() => {
+      ctx.replyWithMarkdownV2(`🎁 *Giveaway* 🎁
+        
+${escape(`This is a giveaway based on referrals. In this giveaway each referral point you got will qualify you with 1 entry.
+If you invited 5 people, it means you have 5 entries. Consult your points using the command /leaderboard.
+
+The winner gets the prize, but his points go back to zero. All the others keep their points so they have a higher chance in the next giveaway.`)}`);
+    }, 5000);
+    setTimeout(() => {
+      ctx.reply("Are you ready?");
+    }, 6000);
+    setTimeout(() => {
+      ctx.reply("The winner is...");
+    }, 10000);
+    const winner = (async () => {
+      const allUsers = await database.getAllUsers();
+      let entries = allUsers.reduce(
+        (acc, curr) => {
+          for (let i = 0; i < curr.points; i++) {
+            acc.push(curr);
+          }
+          return acc;
+        },
+        [] as {
+          userid: number;
+          username: string;
+          points: number;
+        }[]
+      );
+
+      const winner = getRandomInt(0, entries.length);
+      return entries[winner];
+    })();
+    console.log("Winner is: ", await winner);
+    setTimeout(async () => {
+      ctx.replyWithMarkdownV2(`🎉 With a total of *${
+        (await winner).points
+      }* invites, *@${(await winner).username}*  🎉
+
+\\(id\\: ${(await winner).userid}\\)`);
+    }, 15000);
+    setTimeout(() => {
+      ctx.replyWithMarkdownV2(
+        `${escape(`We will contact you soon. 
+
+For those who didn't win, don't worry! The giveaways won't stop, and you might be the upcoming winner. Keep inviting people to raise your chances!
+
+The next date will be revealed in no time.`)}`
+      );
+    }, 17000);
+    return ctx.replyWithMarkdownV2(`🎁 *Giveaway* 🎁
+        
+Giving away: *${escape(reward)}*`);
+  }
 });
 
 // Launch
