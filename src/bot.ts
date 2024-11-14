@@ -187,12 +187,12 @@ bot.command("referralsgiveaway", async (ctx) => {
   const caller = await ctx.getChatMember(callerid).catch(() => null);
   if (caller?.status === "administrator" || caller?.status === "creator") {
     setTimeout(() => {
-      ctx.replyWithMarkdownV2(`🎁 *Giveaway* 🎁
-        
-${escape(`This is a giveaway based on referrals. In this giveaway each referral point you got will qualify you with 1 entry.
+      ctx.replyWithMarkdownV2(
+        `${escape(`This is a giveaway based on referrals. In this giveaway each referral point you got will qualify you with 1 entry.
 If you invited 5 people, it means you have 5 entries. Consult your points using the command /leaderboard.
 
-The winner gets the prize, but his points go back to zero. All the others keep their points so they have a higher chance in the next giveaway.`)}`);
+The winner gets the prize, but his points go back to zero. All the others keep their points so they have a higher chance in the next giveaway.`)}`
+      );
     }, 5000);
     setTimeout(() => {
       ctx.reply("Are you ready?");
